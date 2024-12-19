@@ -1,4 +1,4 @@
-import appwriteService from '../appwrite/config'
+import service from '../appwrite/config'
 import { Container, PostCard } from '../Components'
 import { useState, useEffect } from 'react'
 
@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 function AllPosts() {  //These all post won't get to us so we will make query
   const [posts, setPosts] = useState([])
   useEffect(() => { }, [])
-  appwriteService.getPosts([])
+  service.getPost([])
     .then((posts) => {
       if (posts) {
         setPosts(posts.documents)
@@ -20,7 +20,7 @@ function AllPosts() {  //These all post won't get to us so we will make query
           {posts.map(
             (post) => (
               <div key={post.$id} className='p-2 w-1/4'>
-                <PostCard post={post} />
+                <PostCard {...post} />
               </div>
             )
           )}

@@ -23,15 +23,15 @@ export class AuthService {
         return userAccount;
       }
     } catch (error) {
-      console.log("Appwrite serive :: createAccount :: error", error)
+      console.log("Appwrite service :: createAccount :: error", error)
     }
   }
 
   async login({ email, password }) {
     try {
-      return await this.account.createEmailSession(email, password);
+      return await this.account.createEmailPasswordSession(email, password);
     } catch (error) {
-      console.log("Appwrite serive :: login :: error", error)
+      console.log("Appwrite service :: login :: error", error)
     }
   }
 
@@ -39,16 +39,16 @@ export class AuthService {
     try {
       return await this.account.get();
     } catch (error) {
-      console.log("Appwrite serive :: getCurrentUser :: error", error)
+      console.log("Appwrite service :: getCurrentUser :: error", error)
     }
     return null;
   }
 
   async logout() {
     try {
-      return await this.account.deleteSessions(); //It will logout from all the devices
+      await this.account.deleteSessions(); //It will logout from all the devices
     } catch (error) {
-      console.log("Appwrite serive :: logout :: error", error)
+      console.log("Appwrite service :: logout :: error", error)
     }
   }
 }

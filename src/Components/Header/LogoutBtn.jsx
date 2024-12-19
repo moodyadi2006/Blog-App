@@ -1,13 +1,13 @@
 import { useDispatch } from "react-redux";
-import authService from "../../appwrite/auth";
-import { logout } from "../../store/authSlice";
+import authService from "../../appwrite/auth"; //We have taken authService becoz it will tell whether I have logged in or not, Signed Up or not
+import { logout as logoutFromStore } from "../../store/authSlice"; //Here we will take logout information from store and there only we will mark its status as false and will not show its data
 
 function LogoutBtn() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch()  //It dispatches our data into store
   const logoutHandler = () => {
-    authService.logout()
+    authService.logout() //It will call the logout function of authService
       .then(() => {
-        dispatch(logout()) //It is written to save important information in store
+        dispatch(logoutFromStore()) //It is written to save important information in store and will tell that user has logged out
       })
   }
 

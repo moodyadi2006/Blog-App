@@ -1,33 +1,33 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Select, RTE } from '../index'
-import appwriteService from '../../appwrite/config'
+import service from '../../appwrite/config'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 
 
 export default function PostForm({ post }) {
-  const { register, handleSubmit, watch, setValue, getValues } = useForm({
+  const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
     defaultValues: {
       title: post?.title || '',
       slug: post?.slug || '',
       content: post?.content || '',
       status: post?.status || 'active',
     }
-  }); //If we want to watch any field continuously then we can do using watch,
+  }); //If we want to watch any field continuously then we can do it using watch,
   //  also can set Value using setValue and if we want control of the form then we will use this, this control is directly pass to RTE and 
   // at last we can also get values from the form using getValues
   const navigate = useNavigate();
-  const userData = useSelector(state => state.user.userData)
+  const userData = useSelector(state => state.auth.userData)  //Here I have made changes
 
   const submit = async (data) => {
     if (post) {
-      const file = data.FeaturedImage[0] ? appwriteService.uploadFile(data.FeaturedImage[0]) : null  //This will upload the file
+      const file = data.image[0] ? service.uploadFile(data.image[0]) : null  //This will upload the file
       if (file) {
-        appwriteService.deleteFile(post.FeaturedImage) //this will delete the file
+        service.deleteFile(post.FeaturedImage) //this will delete the file
       }
-      const dbPost = await appwriteService.updatePost(
+      const dbPost = await service.updatePost(
         post.$id, {
         ...data,
         FeaturedImage: file ? file.$id : undefined,
@@ -37,16 +37,16 @@ export default function PostForm({ post }) {
         navigate(`/post/${dbPost.$id}`)
       }
     } else {
-      const file = await appwriteService.uploadFile( //Todo, make changes as above
+      const file = await service.uploadFile( //Todo, make changes as above
         data.image[0]
       );
 
       if (file) {
         const fileId = file.$id
         data.FeaturedImage = fileId
-        const dbPost = await appwriteService.createPost({
+        const dbPost = await service.createPost({
           ...data,
-          UserID: userData.$id
+          userId: userData.$id
         })
         if (dbPost) {
           navigate(`/post/${dbPost.$id}`)
@@ -109,7 +109,7 @@ export default function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
+              src={service.getFilePreview(post.FeaturedImage)}
               alt={post.title}
               className="rounded-lg"
             />

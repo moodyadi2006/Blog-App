@@ -1,7 +1,7 @@
 import React, { useId } from 'react'
 
 function Select({ label,
-  options = [],  //options is by default an array
+  options,  //options is by default an array
   className = '',
   ...props },
   ref) {
